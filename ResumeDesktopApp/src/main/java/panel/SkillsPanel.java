@@ -83,6 +83,7 @@ UserSkillDAOInter userSkillDao = Context.userDaoSkillInter();
         buttonDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSkills = new javax.swing.JTable();
+        save = new javax.swing.JButton();
 
         txtSkillName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,6 +129,13 @@ UserSkillDAOInter userSkillDao = Context.userDaoSkillInter();
         ));
         jScrollPane1.setViewportView(tblSkills);
 
+        save.setText("Save");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -150,7 +158,9 @@ UserSkillDAOInter userSkillDao = Context.userDaoSkillInter();
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(buttonAdd)
                                 .addGap(31, 31, 31)
-                                .addComponent(buttonDelete)))
+                                .addComponent(buttonDelete)
+                                .addGap(54, 54, 54)
+                                .addComponent(save)))
                         .addGap(0, 147, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE))
                 .addContainerGap())
@@ -166,10 +176,15 @@ UserSkillDAOInter userSkillDao = Context.userDaoSkillInter();
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(powerSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonAdd)
-                    .addComponent(buttonDelete))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonAdd)
+                            .addComponent(buttonDelete))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(save)
+                        .addGap(2, 2, 2)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -200,7 +215,7 @@ UserSkillDAOInter userSkillDao = Context.userDaoSkillInter();
         
         
         
-        fillTable();
+        fillWindow();
     }//GEN-LAST:event_buttonDeleteActionPerformed
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
@@ -215,8 +230,26 @@ UserSkillDAOInter userSkillDao = Context.userDaoSkillInter();
         int power  =  powerSlider.getValue();
         UserSkill userSkill = new UserSkill(null , Config.loggedInUser , skill , power);
         userSkillDao.insertUserSkill(userSkill);
-        fillTable();
+        fillWindow();
     }//GEN-LAST:event_buttonAddActionPerformed
+
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+       UserSkill userSkill =userSkillList.get(tblSkills.getSelectedRow());
+            String skillName =  txtSkillName.getText();
+        Skill skill = null;
+        if(skillName!=null && !(skillName.trim().isEmpty())){
+            skill =  new Skill(0 , skillName);
+            skillDao.addSkill(skill);
+        }else{
+            skill =  (Skill) cbSkill.getSelectedItem();
+        }
+        int power  =  powerSlider.getValue();
+        userSkill.setSkill(skill);
+        userSkill.setPower(power);
+        
+        userSkillDao.updateUserSkill(userSkill);
+        fillWindow();
+    }//GEN-LAST:event_saveActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -228,6 +261,7 @@ UserSkillDAOInter userSkillDao = Context.userDaoSkillInter();
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider powerSlider;
+    private javax.swing.JButton save;
     private javax.swing.JTable tblSkills;
     private javax.swing.JTextField txtSkillName;
     // End of variables declaration//GEN-END:variables

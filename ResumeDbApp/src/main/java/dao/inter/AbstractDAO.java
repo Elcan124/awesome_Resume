@@ -9,17 +9,18 @@ import lombok.SneakyThrows;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public abstract class AbstractDAO {
 
     @SneakyThrows
-    public  Connection connect() {
+    public  Connection connect()  {
 
 
 
         String url = "jdbc:mysql://localhost:3306/resume";
         String username = "root";
-        String password = "Elcan619";
+        String password = "    ";
         Connection c = DriverManager.getConnection(url, username, password);
         return c;
 
