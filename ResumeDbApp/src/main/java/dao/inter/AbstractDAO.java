@@ -17,7 +17,7 @@ public abstract class AbstractDAO {
     public  Connection connect()  {
 
 
-
+          Class.forName("com.mysql.cj.jdbc.Driver");
         String url = "jdbc:mysql://localhost:3306/resume";
         String username = "root";
         String password = "    ";

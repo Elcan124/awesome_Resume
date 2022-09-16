@@ -155,7 +155,7 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
     public boolean addUser(User u) {
         try (Connection c = connect()) {
 
-            PreparedStatement pstmt = c.prepareStatement("insert into user (name , surname  ,email,phone ,profile_Description ,address , birthdate ) values(?,?,?,? ,? ,? ,?)");
+            PreparedStatement pstmt = c.prepareStatement("insert into user (name , surname  ,email,phone ,profile_Description ,address , birthdate , birthplace_id ,nationality_id) values(?,?,?,? ,? ,? ,? ,? ,?)");
             pstmt.setString(1, u.getName());
             pstmt.setString(2, u.getSurname());
             pstmt.setString(3, u.getEmail());
@@ -163,6 +163,10 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
               pstmt.setString(5, u.getProfile_Description());
                pstmt.setString(6, u.getAdress());
                 pstmt.setDate(7, u.getBirthdate());
+                
+                 pstmt.setInt(8, u.getBirthplace().getId());
+                  pstmt.setInt(9, u.getNationality().getId());
+                
               
 
             return pstmt.execute();
