@@ -8,7 +8,7 @@ import java.sql.Date;
 import java.util.List;
 
 public class User {
-    private int id;
+    private Integer id;
     private String name;
     private String surname;
     private String email;
@@ -20,8 +20,10 @@ public class User {
     private Country birthplace;
     private Country nationality;
     private List<UserSkill>  skills;
+    private String password ;
 
-    public User(int id) {
+
+    public User(Integer id) {
         this.id = id;
     }
 
@@ -70,7 +72,7 @@ public class User {
 
     }
 
-    public User(int id, String name, String surname, String email, String phone, String profile_Description, String adress, Date birthdate, Country birthplace, Country nationality) {
+    public User(Integer id, String name, String surname, String email, String phone, String profile_Description, String adress, Date birthdate, Country birthplace, Country nationality ) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -81,7 +83,22 @@ public class User {
         this.birthdate = birthdate;
         this.birthplace = birthplace;
         this.nationality = nationality;
+
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<UserSkill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<UserSkill> skills) {
+        this.skills = skills;
+    }
+
+
 
     public int getId() {
         return id;

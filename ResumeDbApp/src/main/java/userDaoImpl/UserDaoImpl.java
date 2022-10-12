@@ -21,7 +21,7 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
 
 
     private User getUser(ResultSet rset) throws Exception{
-        int id = rset.getInt("id");
+        Integer id = rset.getInt("id");
         String name = rset.getString("name");
         String surname = rset.getString("surname");
         String email = rset.getString("email");
@@ -36,7 +36,7 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
         Date birthdate = rset.getDate("birthdate");
         Country country = new Country(birthplaceid , birthplaceStr , null);
         Country nationality =  new Country(nationalityid , null , nationalityStr);
-        return new User(id, name, surname, email, phone, descriptionn,address, birthdate ,country , nationality);
+        return new User(id, name, surname, email, phone, descriptionn,address, birthdate ,country , nationality );
     }
 
     @Override
@@ -53,6 +53,54 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
 
             while (rset.next()) {
               User u =   getUser(rset);
+
+                result.add(u);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public List<User> getAll2(String name, String surname, Integer nationalityID) {
+        List<User> result = new ArrayList<>();
+
+        try (Connection c = connect()) {
+
+
+            String sql = "SELECT u.*, n.name as country  , c.nationality as nationality  FROM user u   left join country n on u.birthplace_id = n.id left join country c on u.nationality_id= c.id where 1=1";
+            if(name!=null && !name.trim().isEmpty()){
+                sql+=" and u.name =?";
+            }
+            if(surname!=null && !surname.trim().isEmpty()){
+                sql+=" and u.surname =?";
+            }
+            if(nationalityID!=null){
+                sql+=" and u.nationality_id =?";
+            }
+            PreparedStatement stmt = c.prepareStatement(sql);
+int i =1 ;
+if(name!=null && !name.trim().isEmpty()){
+    stmt.setString(i , name);
+    i++;
+}
+            if(surname!=null && !surname.trim().isEmpty()){
+                stmt.setString(i ,surname);
+                i++;
+            }
+            if(nationalityID!=null){
+                stmt.setInt(i , nationalityID);
+            }
+
+
+            stmt.execute();
+
+
+            ResultSet rset = stmt.getResultSet();
+
+            while (rset.next()) {
+                User u =   getUser(rset);
 
                 result.add(u);
             }
@@ -179,6 +227,47 @@ public class UserDaoImpl extends AbstractDAO implements UserDaoInter {
 
         }
     }
+    @Override
+    public User findByEmailandPassword(String email, String password) {
+        User  result =  null ;
+
+        try (Connection c = connect()) {
+
+          PreparedStatement stmt = c.prepareStatement("select * from user where email=? and password=?");
+            stmt.setString(1, email);
+            stmt.setString(2,password);
+
+
+           ResultSet rset = stmt.executeQuery();
+
+            while (rset.next()) {
+
+                result = getUserSimple(rset);
+            }
+            }catch(Exception ex){
+
+        }
+
+
+        return result ;
+    }
+
+    private User getUserSimple(ResultSet rset) throws Exception{
+        Integer id = rset.getInt("id");
+        String name = rset.getString("name");
+        String surname = rset.getString("surname");
+        String email = rset.getString("email");
+        String phone = rset.getString("phone");
+        String address = rset.getString("address");
+        String descriptionn = rset.getString("profile_Description");
+        String password = rset.getString("password");
+
+
+        Date birthdate = rset.getDate("birthdate");
+
+        return new User(id, name, surname, email, phone, descriptionn,address, birthdate ,null , null );
+    }
+
 
 
 

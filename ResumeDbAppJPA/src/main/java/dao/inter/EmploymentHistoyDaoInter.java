@@ -5,15 +5,10 @@
 package dao.inter;
 
 import entity.EmploymentHistory;
-import entity.Skill;
+import entity.UserSkill;
 
 import java.util.List;
 
-public interface SkillDaoInter {
-
-    public List<Skill> getAllSkill();
-    public boolean addSkill(Skill skill );
-    public Skill getById(int userId);
-    public Skill getBySkillName(String name);
-    
+public interface EmploymentHistoyDaoInter {
+    public List<EmploymentHistory> getAllEmploymentHistorybyID(int id);
 }
